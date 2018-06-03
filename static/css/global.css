@@ -1,0 +1,101 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+}
+
+body {
+    background: #f4f4f4;
+}
+
+.pa {
+    position: absolute;
+}
+
+.pr {
+    position: relative;
+}
+
+.pf {
+    position: fixed;
+}
+
+.frc {
+    display: flex;
+    /* justify-content: spa; */
+    align-items: center;
+    flex-direction: row
+}
+
+.fcc {
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column
+}
+
+.fl {
+    float: left
+}
+
+.fr {
+    float: right;
+}
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.clearfix:after {
+    content: '';
+    display: block;
+    clear: both;
+    height: 0;
+    line-height: 0;
+    visibility: hidden;
+}
+
+
+/* 垂直居中 */
+
+.phc {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%)
+}
+
+
+/* 垂直居中 */
+
+.pvc {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+/* 水平垂直居中 */
+
+.phvc {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mb10 {
+    margin-bottom: 10px;
+}
+
+.mb20 {
+    margin-bottom: 20px;
+}
