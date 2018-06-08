@@ -1,418 +1,288 @@
 <template>
     <div class="index">
-    <!-- 搜索框 -->
-     <!-- <yd-search v-model="value1" :on-submit="submitHandler" fullpage cancel-text='搜索'	 placeholder='搜索选手名称或编号'></yd-search> -->
-      <yd-search :result="result" fullpage v-model="value2"  placeholder='搜索选手名称或编号' :item-click="itemClickHandler" :on-submit="submitHandler" cancel-text='搜索'></yd-search>
-    <!-- 选项卡 -->
-     <yd-tab horizontal-scroll   >
-        <yd-tab-panel :label="item.title" v-for="item in tab" :key="item.index" :index="item.index">
-             <yd-slider autoplay="3000">
-                <yd-slider-item v-for="imgItem in item.imgs" :key="imgItem.index" :index="imgItem.index">
-                        <img :src="imgItem">
-                </yd-slider-item>
-             </yd-slider>
-        </yd-tab-panel>
-    </yd-tab>
-    <!-- 赞助商 -->
-    <div class="zzdw pr">
-        <img class="zzdw_logo" src="../../assets/index/zzdw_logo.png" alt="">
-        <img class="zzdw_name" src="../../assets/index/zzdw.png" alt="">
-        <div class="line pa"></div>
-    </div>
-    <!-- 参赛数据 -->
-    <div class="race_data mb20">
-      <!-- 总数据 -->
-      <div class="all_data pr">
-        <!-- title -->
-        <div class="phc title">参赛总数据</div>
-        <!-- 数据展示 -->
-        <div class="frc box">
-          <div class="fcc">
-            <div class="num ">2115</div>
-            <div class="drc">参赛选手</div>
-           </div>
-         <div class="fcc">
-            <div class="num">16.3 <span>万</span> </div>
-            <div class="drc">累计投票</div>
-          </div>
-         <div class="fcc">
-            <div class="num">89.6 <span>万</span> </div>
-            <div class="drc">访问量</div>
-        </div>
-       </div>
-      </div>   
-      <!-- 区域数据 -->
-      <div class="area_data pr">
-        <!-- title -->
-        <div class="phc title">湖北赛区数据</div>
-        <!-- 数据展示 -->
-        <div class="frc box">
-          <div class="fcc">
-            <div class="num">2115</div>
-            <div class="drc">参赛选手</div>
-          </div>
-         <div class="fcc">
-            <div class="num">16.3 <span>万</span> </div>
-            <div class="drc">累计投票</div>
-          </div>
-         <div class="fcc">
-            <div class="num">89.6 <span>万</span> </div>
-            <div class="drc">访问量</div>
-        </div>
-       </div>
-      </div>      
-    </div>
-    <!-- 最新选手 - 赛区排名 -->
-    <div class="Player">
-      <!-- 头部 -->
-      <div class="zzdw pr title">
-        <img class="zzdw_logo" src="../../assets/index/time.png" alt="">
-        <span class="time">2018年6月5日至6月20日</span>
-        <div class="line pa"></div>
-      </div>
-      <!-- tab栏 -->
-      <div class="tab frc">
-        <div :class="isNewPlay?'active':''" @click="tabToggle">最新选手</div>
-        <div :class="isPaiMin?'active':''" @click="tabToggle">赛区排名</div>
-      </div>
-      <!-- 选手列表 -->
-      <div class="playerList">
-        <div class="itme frc">
-          <div>
-            <img src="../../assets/index/avator.png" alt="">
-          </div>
-          <div>
-            <img src="../../assets/index/avator.png" alt="">
+        <div class="pf topBox">
+          <!-- 搜索框 -->
+            <!-- <yd-search  placeholder="搜索选手名称或编号"></yd-search> -->
+            <form action="" class="form">
+              <div class="frc searchBox ">
+                
+                <div class="pr" style="width:100%">
+                  <!-- 左边的搜索logo -->
+                  <img v-show="searchBlur" src="../../assets/index/search.png" alt="" class="fouce_search_icon pa">                  
+                  <input type="text"  class=" search_inp" @focus="focus" @blur="blur" style="padding-left:30px" v-model="Searchvalue">
+                  <div v-show="!searchBlur" class="pa placeholder" @click="Letfoucus">
+                    <img src="../../assets/index/search.png" alt="" class="search_icon">搜索选手名称或编号
+                  </div>
+                  <!-- 中间定位位置 -->
+                </div>
+                <button  :class="{'searchBtn':true,'SearchActive':Searchvalue.length!=0}">搜索</button>
+                <!-- :class=" -->
+                <!-- :class="{'searchBtn' : true, 'SearchActive': true}" -->
+              </div>
+              
+            </form>
+          <!-- tab栏目 -->
+          <div class="frc navTab" v-if="isHistoryHome">
+            <!-- currentNav==0?'navActive':'' -->
+            <div @click="NavtabToggle(0)"  :class="currentNav==0?'navActive':''">湖北赛区</div>
+            <div @click="NavtabToggle(1)" :class="currentNav==1?'navActive':''">湖南赛区</div>
+            <div @click="NavtabToggle(2)" :class="currentNav==2?'navActive':''">历史赛区</div>
           </div>
         </div>
-       
-      </div>
-    </div>
-    <router-view></router-view>
-    <ul>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-      <li>10000</li>
-    </ul>
-    
+          <component v-if="currentNav==0" is="Voting"></component>
+          <component v-if="currentNav==1" is="Enrolment"></component>
+          <component v-if="currentNav==2" is="HistoryArea"></component>
+        <!-- 底部导航栏 -->
+        <div class="pd_tabBar pf frc">
+          <!-- <div class="left frc"> -->
+                <div class="home fcc" @click="goIndex">
+                  <img src="../../assets/tabbar/home.png" alt="home" class="tab_icon">
+                  <span class="pt3 tab_text tabBarActive" >首页</span>            
+                </div>  
+                <div class="signup pr" @click="goSignup" v-show="!isSign">
+                  <img src="../../assets/tabbar/sign.png" alt="signup" class="tab_sign pa">             
+                  <span class="pt3 tab_text sign_text pa">报名</span>        
+              </div>
+                <div class="signup pr" @click="goMe" v-show="isSign">
+                  <img  src="../../assets/tabbar/me.png" alt="我的" class="tab_sign pa">                         
+                  <span class="pt3 tab_text sign_text pa">我的</span>        
+              </div>
+               <div class="home fcc" @click="goRule">
+                  <img src="../../assets/tabbar/rule.png" alt="rule" class="tab_icon">             
+                  <span class="pt3 tab_text">活动规则</span>        
+              </div>
+          <!-- </div> -->
+        </div>
+
+      
+          
     </div>
 </template>
 
 <script>
+// // 导入最新选手组件
+// import areaRanking from "./areaRanking/areaRanking";
+// import newPlayer from "./newPlayer/newPlayer";
+// import Voting from "./raceArea/raceArea/Voting";
+// import Voting from "./raceArea/Voting";
+import HistoryArea from "@/components/index/raceArea/HistoryArea/HistoryArea"
+import Enrolment from "@/components/index/raceArea/Enrolment"
+import Voting from "@/components/index/raceArea/Voting"
+// import Voting from "@/components/index/raceArea/Voting";
 export default {
+  components: {
+    Voting:Voting,
+    Enrolment:Enrolment,
+    HistoryArea:HistoryArea,
+  },
   data() {
     return {
-      value2: "",
-      result: [],
-      tab: [
-        {
-          title: "湖北赛区",
-          imgs: [
-            "http://static.ydcss.com/uploads/ydui/1.jpg",
-            "http://static.ydcss.com/uploads/ydui/2.jpg",
-            "http://static.ydcss.com/uploads/ydui/3.jpg"
-          ]
-        },
-        {
-          title: "江西赛区",
-          imgs: [
-            "œ://static.ydcss.com/uploads/ydui/1.jpg",
-            "http://static.ydcss.com/uploads/ydui/2.jpg",
-            "http://static.ydcss.com/uploads/ydui/3.jpg"
-          ]
-        },
-        {
-          title: "广东赛区",
-          imgs: [
-            "http://static.ydcss.com/uploads/ydui/1.jpg",
-            "http://static.ydcss.com/uploads/ydui/2.jpg",
-            "http://static.ydcss.com/uploads/ydui/3.jpg"
-          ]
-        },
-        {
-          title: "广西赛区",
-          imgs: [
-            "http://static.ydcss.com/uploads/ydui/1.jpg",
-            "http://static.ydcss.com/uploads/ydui/2.jpg",
-            "http://static.ydcss.com/uploads/ydui/3.jpg"
-          ]
-        },
-        {
-          title: "四川赛区",
-          imgs: [
-            "http://static.ydcss.com/uploads/ydui/1.jpg",
-            "http://static.ydcss.com/uploads/ydui/2.jpg",
-            "http://static.ydcss.com/uploads/ydui/3.jpg"
-          ]
-        }
-      ],
-      isNewPlay: true,
-      isPaiMin: false
+      currentNav:0,
+      isHistoryHome:true,
+      isSign:false,//判断是否有报名，报名则显示我的入口
+      searchBlur:false,//
+      Searchvalue:"",
+      zoneData:"",
     };
   },
   methods: {
-    getResult(val) {
-      if (!val) return [];
-      return [
-        "Apple",
-        "Banana",
-        "Orange",
-        "Durian",
-        "Lemon",
-        "Peach",
-        "Cherry",
-        "Berry",
-        "Core",
-        "Fig",
-        "Haw",
-        "Melon",
-        "Plum",
-        "Pear",
-        "Peanut",
-        "Other"
-      ].filter(value => new RegExp(val, "i").test(value));
+    // 赛区数据切换
+    // goVoting
+    getIndex() {
+        this.$http.post(this.$api.index, this.$qs.stringify({ zone_id: 7 })).then((res)=>{
+          if(res.status==200){
+            this.zoneData = res.data.data;
+          }
+          console.log(1111111111)
+          console.log(this.zoneData);
+      });
+   
     },
-    itemClickHandler(item) {
-      this.$dialog.toast({ mes: `搜索：${item}` });
+    focus(){
+      if(this.Searchvalue.length==0){
+        this.searchBlur = true;
+      }
+      
     },
-    submitHandler(value) {
-      this.$dialog.toast({ mes: `搜索：${value}` });
+    blur(){
+      if(this.Searchvalue.length==0){
+        this.searchBlur = false;
+      }
     },
-    // tab栏切换
-    tabToggle() {
-      this.isNewPlay = !this.isNewPlay;
-      this.isPaiMin = !this.isPaiMin;
-    }
+    Letfoucus(){
+    },
+    // 赛区数据切换结束符
+    goIndex() {
+      this.$router.push({ name: "index" });
+    },
+    goSignup() {
+      this.$router.push({ name: "Signup" });
+    },
+    goRule() {
+      // this.$router.push({ name: "ActiveRule" });
+      window.location.href = "http://wx.palmar.cn/vote/rule.html"
+    },
+    NavtabToggle(num){
+      this.currentNav = num;      
+      console.log(this.currentNav);
+    },
+    // 已报名去到我的
+    goMe(){
+        this.$router.push({ name: "me" });
+    },
+    mounted () {
+      this.getIndex();      
+    },
+    created() {
+      this.getIndex();
+      
+    },
+    // 获取首页信息
+  
+  
   },
-  watch: {
-    value2(val) {
-      this.result = this.getResult(val);
-    }
-  },
-  // 生命周期函数
-  created() {
-    // console.log(this.$http);
-    // this.$http.post(this.$api.index).then(() => {
-    //   console.log(111111);
-    // });
-  }
+
 };
 </script>
 
 <style scoped>
+button.SearchActive{
+  background:#f05b29;
+  color:#fff;
+}
+.form{
+  padding:5px 10px;
+}
 .index {
-  /* padding:0 10px; */
-}
-.zzdw {
-  background: #ffffff;
-  width: 100%;
-  height: 40px;
-  line-height: 40px;
-  margin-bottom: 27px;
-  padding-left: 10px;
-}
-.zzdw_logo {
-  width: 62px;
-  height: 14px;
-  vertical-align: middle;
-  margin-right: 30px;
-}
-.zzdw_name {
-  width: 96px;
-  height: 24px;
-  vertical-align: middle;
-}
-.zzdw .line {
-  width: 1px;
-  background: #eeeeee;
-  left: 88px;
-  top: 50%;
-  height: 20px;
-  transform: translateY(-50%);
-}
-.race_data {
-  background: #ffffff;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
-  height: 206px;
-}
-
-.race_data .num {
-  font-size: 20px;
-  margin-bottom: 2px;
-}
-.race_data .drc {
-  font-size: 12px;
-  color: #999999;
-}
-.race_data .title {
-  width: 121px;
-  height: 22px;
-  line-height: 22px;
-  text-align: center;
-  font-size: 14px;
-  color: #ffffff;
-  transform: translate(-50%, -50%);
-  border-radius: 100px;
-}
-.race_data .box {
-  justify-content: space-around;
-  height: 104px;
-}
-.race_data .box div {
-  justify-content: space-between;
-}
-.all_data .title {
-  background: #f05b29;
-  box-shadow: 0 1px 5px 0 #ff5000;
-}
-.area_data .title {
-  background: #4a90e2;
-  box-shadow: 0 1px 5px 0 #4a90e2;
-}
-/* 最新选手 */
-.Player {
-  background: #fff;
-  padding: 0 10px;
-}
-.Player .title {
+  padding-bottom: 50px;
   box-sizing: border-box;
-  margin-bottom: 0;
-  line-height: 40px;
-  padding: 0;
+  padding-top: 67px;
 }
-.Player .time {
-  font-size: 15px;
-  color: #666666;
-  /* padding-top:4px; */
-  vertical-align: baseline;
+.topBox {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 600px;
+  /* height:74px; */
+  top: 0;
+  background: #fff;
+  z-index: 10000;
 }
-.Player .tab {
-  height: 40px;
-  /* background: red; */
+.searchBox {
   justify-content: space-between;
-  padding: 0 32px;
 }
-.Player .tab div {
-  font-size: 15px;
-  color: #666666;
-  height: 40px;
-  line-height: 40px;
+input::-ms-input-placeholder {
+  text-align: center;
 }
-.Player .tab div.active {
-  border-bottom: 3px solid #f05b29;
-  color: #f05b29;
-}
-/* 选手列表 */
-.playerList{
-  /* padding:0 5px; */
-}
-.playerList .itme{
-  /* justify-content: space-between; */
-}
-.playerList .itme img {
-  height: 206px;
-}
-.playerList .itme div{
-  width: 45%;
 
+input::-webkit-input-placeholder {
+  text-align: center;
+}
+input::input-placeholder{
+  text-align: center;
   
 }
+.placeholder{
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size:14px;
+  color:#666666;
+}
+.search_icon {
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  margin-right:6px;
+}
+.fouce_search_icon{
+  width: 14px;
+  height: 14px;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.search_inp {
+  width: 100%;
+  background: #ededed;
+  border-radius: 4px;
+  height: 30px;
+  font-size: 13px;
+  color: #666666;
+  outline: none;
+  border: 0;
+}
+.searchBtn {
+  background: #ededed;
+  border-radius: 4px;
+  width: 40px;
+  height: 29px;
+  margin-left: 8px;
+  font-size: 13px;
+  color: #666666;
+  border: none;
+  outline: 0;
+  widht:20%
+}
+/* 搜索框 */
+.navTab {
+  padding: 15px 10px 0 10px;
+  justify-content: space-around;
+  font-size: 14px;
+  color: #666666;
+}
+.navTab div{
+  box-sizing: border-box;  
+  padding-bottom:6px;
+}
+.navActive{
+  color:#f05b29!important;
+  border-bottom: 2px solid #f05b29;
+}
 
+.pd_tabBar {
+  justify-content: space-around;
+  width: 100%;
+  max-width: 600px;
+  background: #fff;
+  height: 50px;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+/* tab栏激活 */
+.tabBarActive {
+  color: #f05b29 !important;
+}
+.pd_tabBar > div {
+  width: 33.333%;
+}
+
+.pd_tabBar .tab_icon {
+  width: 22px;
+  height: 22px;
+}
+.pd_tabBar .tab_text {
+  font-size: 10px;
+  color: #333333;
+}
+.signup {
+  text-align: center;
+  height: 50px;
+}
+.pd_tabBar .tab_sign {
+  width: 35px;
+  height: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -10px;
+}
+.pd_tabBar .sign_text {
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 8px;
+}
+.pd_tabBar{
+  z-index:10000;
+}
 </style>

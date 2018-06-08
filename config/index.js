@@ -10,7 +10,25 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      // '/api': {
+        // target: 'http://bin.dx2.me:7000/zhangwo/api/index.php/api/',//设置你调用的接口域名和端口号 
+        // target: 'http://bin.dx2.me:7000/zhangwo/api/index.php/api/',//设置你调用的接口域名和端口号 
+      //   changeOrigin: true,     //跨域
+      //   pathRewrite: {
+      //     '^/api': '/'   
+      //   }
+      // },
+      // '/api': {
+       
+      //   target: 'http://192.168.1.138/new_palmar/public/wechat/index.php/',//设置你调用的接口域名和端口号 
+      //   changeOrigin: true,     //跨域
+      //   pathRewrite: {
+      //     '^/api': '/'   
+      //   }
+      // }
+    },
+    
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

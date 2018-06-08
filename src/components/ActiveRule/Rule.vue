@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>具体赛区信息</h1>
+        活动规则
     </div>
 </template>
 
