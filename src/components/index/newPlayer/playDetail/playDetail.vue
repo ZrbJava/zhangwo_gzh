@@ -154,6 +154,15 @@ export default {
     },
     goSignup(){
       this.$router.push({ name: 'Signup'})
+    },
+     getPlayerlist(){
+      this.$http.post(this.$api.playerlist, this.$qs.stringify({ zone_id: 7,page:1 })).then((res)=>{
+           if(res.data.status==1){
+             this.playerlist = res.data.data.playerlist;           
+            // console.log(res)
+           }
+            console.log(this.playerlist);
+        });
     }
   },
   created() {

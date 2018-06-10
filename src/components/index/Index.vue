@@ -1,11 +1,8 @@
 <template>
-    <div class="index">
+    <div class="index" v-if="loading">
         <div class="pf topBox">
-          <!-- 搜索框 -->
-            <!-- <yd-search  placeholder="搜索选手名称或编号"></yd-search> -->
-            <form action="" class="form">
+            <div class="form">
               <div class="frc searchBox ">
-                
                 <div class="pr" style="width:100%">
                   <!-- 左边的搜索logo -->
                   <img v-show="searchBlur" src="../../assets/index/search.png" alt="" class="fouce_search_icon pa">                  
@@ -15,23 +12,27 @@
                   </div>
                   <!-- 中间定位位置 -->
                 </div>
-                <button  :class="{'searchBtn':true,'SearchActive':Searchvalue.length!=0}">搜索</button>
-                <!-- :class=" -->
-                <!-- :class="{'searchBtn' : true, 'SearchActive': true}" -->
+                <button  :class="{'searchBtn':true,'SearchActive':Searchvalue.length!=0}" @click="goSearchList">搜索</button>
               </div>
               
-            </form>
+            </div>
           <!-- tab栏目 -->
-          <div class="frc navTab" v-if="isHistoryHome">
+          <div class="frc navTab" v-if="isTab" >
             <!-- currentNav==0?'navActive':'' -->
-            <div @click="NavtabToggle(0)"  :class="currentNav==0?'navActive':''">湖北赛区</div>
-            <div @click="NavtabToggle(1)" :class="currentNav==1?'navActive':''">湖南赛区</div>
-            <div @click="NavtabToggle(2)" :class="currentNav==2?'navActive':''">历史赛区</div>
+            <div @click="NavtabToggle(index)" :class="{navActive:currentNav==index}" v-for="(item,key,index) in zoneData.zoneList" :key="key" >{{item.name}}</div>
+            <div @click="NavtabToggle(2)" :class="{navActive:currentNav==2}">历史赛区</div>
+            <!-- 这里接口有问题有问题我暂时先写死 -->
           </div>
         </div>
-          <component v-if="currentNav==0" is="Voting"></component>
+        <keep-alive>
+          <component v-if="currentNav==0" is="Voting" ></component>
           <component v-if="currentNav==1" is="Enrolment"></component>
           <component v-if="currentNav==2" is="HistoryArea"></component>
+            <!-- 这里接口有问题有问题我暂时先写死 -->          
+        </keep-alive>
+          
+          <!-- <component  :is="Voting"></component> -->
+          
         <!-- 底部导航栏 -->
         <div class="pd_tabBar pf frc">
           <!-- <div class="left frc"> -->
@@ -39,11 +40,11 @@
                   <img src="../../assets/tabbar/home.png" alt="home" class="tab_icon">
                   <span class="pt3 tab_text tabBarActive" >首页</span>            
                 </div>  
-                <div class="signup pr" @click="goSignup" v-show="!isSign">
+                <div class="signup pr" @click="goSignup" v-show="!isPlayer">
                   <img src="../../assets/tabbar/sign.png" alt="signup" class="tab_sign pa">             
                   <span class="pt3 tab_text sign_text pa">报名</span>        
               </div>
-                <div class="signup pr" @click="goMe" v-show="isSign">
+                <div class="signup pr" @click="goMe" v-show="isPlayer">
                   <img  src="../../assets/tabbar/me.png" alt="我的" class="tab_sign pa">                         
                   <span class="pt3 tab_text sign_text pa">我的</span>        
               </div>
@@ -53,22 +54,14 @@
               </div>
           <!-- </div> -->
         </div>
-
-      
-          
     </div>
 </template>
 
 <script>
-// // 导入最新选手组件
-// import areaRanking from "./areaRanking/areaRanking";
-// import newPlayer from "./newPlayer/newPlayer";
-// import Voting from "./raceArea/raceArea/Voting";
-// import Voting from "./raceArea/Voting";
+
 import HistoryArea from "@/components/index/raceArea/HistoryArea/HistoryArea"
 import Enrolment from "@/components/index/raceArea/Enrolment"
 import Voting from "@/components/index/raceArea/Voting"
-// import Voting from "@/components/index/raceArea/Voting";
 export default {
   components: {
     Voting:Voting,
@@ -79,30 +72,45 @@ export default {
     return {
       currentNav:0,
       isHistoryHome:true,
-      isSign:false,//判断是否有报名，报名则显示我的入口
-      searchBlur:false,//
+      isPlayer:false,
+      searchBlur:false,
       Searchvalue:"",
       zoneData:"",
+      loading:false,
+      isTab:true,
     };
   },
   methods: {
     // 赛区数据切换
-    // goVoting
     getIndex() {
         this.$http.post(this.$api.index, this.$qs.stringify({ zone_id: 7 })).then((res)=>{
-          if(res.status==200){
+          if(res.data.status==1){
             this.zoneData = res.data.data;
+            this.loading = true
           }
-          console.log(1111111111)
           console.log(this.zoneData);
       });
    
+    },
+    // 是否登陆
+   isplayer() {
+        this.$http.post(this.$api.isplayer, this.$qs.stringify({ user_id: 22 })).then((res)=>{
+          if(res.data.status==1){
+            this.isPlayer = true;
+          }
+      });
+   
+    },
+    // 搜索
+    goSearchList(){
+      if(this.Searchvalue.length!=0){
+        this.$router.push("searchList")
+      }
     },
     focus(){
       if(this.Searchvalue.length==0){
         this.searchBlur = true;
       }
-      
     },
     blur(){
       if(this.Searchvalue.length==0){
@@ -133,19 +141,19 @@ export default {
     mounted () {
       this.getIndex();      
     },
-    created() {
-      this.getIndex();
-      
-    },
+   
     // 获取首页信息
-  
-  
   },
+  created(){
+    this.getIndex();
+    this.isplayer();
+  
+  }
 
 };
 </script>
 
-<style scoped>
+<style scoped lang='less'>
 button.SearchActive{
   background:#f05b29;
   color:#fff;
@@ -170,17 +178,6 @@ button.SearchActive{
 }
 .searchBox {
   justify-content: space-between;
-}
-input::-ms-input-placeholder {
-  text-align: center;
-}
-
-input::-webkit-input-placeholder {
-  text-align: center;
-}
-input::input-placeholder{
-  text-align: center;
-  
 }
 .placeholder{
   left: 50%;
@@ -222,7 +219,7 @@ input::input-placeholder{
   color: #666666;
   border: none;
   outline: 0;
-  widht:20%
+  // width:20%
 }
 /* 搜索框 */
 .navTab {
@@ -230,26 +227,16 @@ input::input-placeholder{
   justify-content: space-around;
   font-size: 14px;
   color: #666666;
-}
-.navTab div{
-  box-sizing: border-box;  
-  padding-bottom:6px;
+  div{
+    box-sizing: border-box;  
+    padding-bottom:6px;
+  }
 }
 .navActive{
   color:#f05b29!important;
   border-bottom: 2px solid #f05b29;
 }
 
-.pd_tabBar {
-  justify-content: space-around;
-  width: 100%;
-  max-width: 600px;
-  background: #fff;
-  height: 50px;
-  bottom: 0px;
-  left: 50%;
-  transform: translateX(-50%);
-}
 /* tab栏激活 */
 .tabBarActive {
   color: #f05b29 !important;
@@ -258,31 +245,40 @@ input::input-placeholder{
   width: 33.333%;
 }
 
-.pd_tabBar .tab_icon {
-  width: 22px;
-  height: 22px;
-}
-.pd_tabBar .tab_text {
-  font-size: 10px;
-  color: #333333;
+.pd_tabBar{
+  justify-content: space-around;
+  width: 100%;
+  max-width: 600px;
+  background: #fff;
+  height: 50px;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index:10000;  
+  .tab_icon{
+      width: 22px;
+    height: 22px;
+  }
+  .tab_text {
+    font-size: 10px;
+    color: #333333;
+  }
+  .tab_sign {
+    width: 35px;
+    height: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -10px;
+  }
+  .sign_text {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 8px;
+  }
 }
 .signup {
   text-align: center;
   height: 50px;
 }
-.pd_tabBar .tab_sign {
-  width: 35px;
-  height: 35px;
-  left: 50%;
-  transform: translateX(-50%);
-  top: -10px;
-}
-.pd_tabBar .sign_text {
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 8px;
-}
-.pd_tabBar{
-  z-index:10000;
-}
+
 </style>

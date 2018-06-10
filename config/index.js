@@ -21,7 +21,7 @@ module.exports = {
       // },
       // '/api': {
        
-      //   target: 'http://192.168.1.138/new_palmar/public/wechat/index.php/',//设置你调用的接口域名和端口号 
+      //   target: 'http://bobo.com/new_palmar/public/wechat/index.php/',//设置你调用的接口域名和端口号 
       //   changeOrigin: true,     //跨域
       //   pathRewrite: {
       //     '^/api': '/'   

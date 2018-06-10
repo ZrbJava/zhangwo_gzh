@@ -33,11 +33,11 @@
                 <div class="drc">参赛选手</div>
               </div>
             <div class="fcc">
-                <div class="num">{{zoneData.matchData.vote_count}} <span>万</span> </div>
+                <div class="num">{{zoneData.matchData.vote_count|formatNum}}</div>
                 <div class="drc">累计投票</div>
               </div>
             <div class="fcc">
-                <div class="num">{{zoneData.matchData.vistor_count}} <span>万</span> </div>
+                <div class="num">{{zoneData.matchData.visitor_count|formatNum}}</div>
                 <div class="drc">访问量</div>
             </div>
           </div>
@@ -54,11 +54,11 @@
                 <div class="drc">参赛选手</div>
               </div>
             <div class="fcc">
-                <div class="num">{{zoneData.zoneMatchData.vote_count}}<span>万</span> </div>
+                <div class="num">{{zoneData.zoneMatchData.vote_count|formatNum}}</div>
                 <div class="drc">累计投票</div>
               </div>
             <div class="fcc">
-                <div class="num">{{zoneData.zoneMatchData.visitor_count}} <span>万</span> </div>
+                <div class="num">{{zoneData.zoneMatchData.visitor_count|formatNum}}</div>
                 <div class="drc">访问量</div>
             </div>
           </div>
@@ -69,7 +69,7 @@
           <!-- 头部 -->
           <div class="zzdw pr title pr10 pl10">
             <img class="zzdw_logo" src="../../../assets/index/time.png" alt="">
-            <span class="time">2018年6月5日至6月20日</span>
+            <span class="time">{{zoneData.zone.start_time|start_time}}至{{zoneData.zone.end_time|end_time}}</span>
             <div class="line pa"></div>
           </div>
           <!-- tab栏 -->
@@ -79,7 +79,9 @@
           </div>
           <!-- 选手列表 -->
           <div class="playerList clearfix">
-            <component :is="current==0?'appPlayer':'appRank'"></component>
+            <keep-alive>
+              <component :is="current==0?'appPlayer':'appRank'" keep-alive></component>
+            </keep-alive>
           </div>
         </div>
         <!-- 加载更多 -->
@@ -95,11 +97,11 @@
 import areaRanking from "../areaRanking/areaRanking";
 import newPlayer from "../newPlayer/newPlayer";
 export default {
+    // props:id,
    components: {
     appRank: areaRanking,
     appPlayer: newPlayer,
   },
-  
   data() {
     return {
       zoneData:'',
@@ -112,19 +114,57 @@ export default {
     tabToggle(num) {
       this.current = num;
     },
+  
     // 测试获取首页数据
-     getIndex() {
-         this.$http.post(this.$api.index, this.$qs.stringify({ zone_id: 7 })).then((res)=>{
-           if(res.status==200){
-             this.zoneData = res.data.data;
-             this.loading = true             
-           }
-            console.log(this.zoneData);
-        });
+    getIndex() {
+        this.$http.post(this.$api.index, this.$qs.stringify({ zone_id: 7 })).then((res)=>{
+          if(res.data.status==1){
+            this.zoneData = res.data.data;
+            this.loading = true,
+            this.$vux.loading.hide()      
+          }
+          // console.log(this.zoneData);
+      });
    
     },
   },
+  filters: {
+      // 格式化单位
+      formatNum(num) {
+          if(num<10000){
+            return num
+          }else{
+            return  Math.round((num /10000) * 10) / 10 + "万";
+          }
+      },
+          // 时间格式化
+      start_time: function (time) {
+        var time = time * 1000;
+        var h = new Date(time);
+        var year = h.getFullYear();
+        var month = h.getMonth() + 1;
+        var day = h.getDate();
+        month = month < 10 ? "0" + month : month;
+        day = day < 10 ? "0" + day : day;
+        var date = year + "年" + month + '月' + day + "日";
+        return date;
+      },
+       end_time: function (time) {
+        var time = time * 1000;
+        var h = new Date(time);
+        var month = h.getMonth() + 1;
+        var day = h.getDate();
+        month = month < 10 ? "0" + month : month;
+        day = day < 10 ? "0" + day : day;
+        var date = month + '月' + day + "日";
+        return date;
+      },
+    },
   created(){
+    this.getIndex();
+    this.$vux.loading.show({
+    text: 'Loading'
+    })
     this.getIndex();
   }
 };

@@ -1,5 +1,16 @@
 <template>
     <div>
+                
+            <!-- <group>
+                <cell title="公司地址" icon="safe-success" value="请输入" inline-desc="1111"></cell>
+            </group> -->
+
+          <!-- <x-address style="display:none;" title="title" v-model="value" :list="addressData" placeholder="请选择地址" :show.sync="showAddress"></x-address> -->
+            <group>
+    <x-address title="title" v-model="value" :list="addressData"></x-address>
+  </group>
+ 
+        
         <div class="signup">
             <div class="container">
                <div style="background:#fff">
@@ -40,37 +51,92 @@
                         <button>报名</button>
                     </div>
                 </form>
-                
+                <actionsheet v-model="actions" :show-cancel= true cancel-text="取消你妹啊"  :menus="menus"></actionsheet>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import { PopupRadio, Picker, Actionsheet, AlertModule,Cell, XAddress } from "vux";
 export default {
-    data(){
-        return{
-         uploadImg:[1,2,3,4,5],
-        }
+  components: {
+    PopupRadio,
+    Picker,
+    Actionsheet,
+    AlertModule,
+    Cell,
+     XAddress
+  },
+  data() {
+    return {
+      uploadImg: [1, 2, 3, 4, 5],
+      value: [],
+      actions: false,
+      menus: {
+        menu1: "删除",
+        menu2: "删除1",
+        menu3: "删除2",
+        menu4: "删除3",
+        menu5: "删除4"
+      },
+       addressData: [
+            {
+                "value": "湖北省",
+                "text": "湖北省",
+                "children": [
+                    {
+                        "value": "武汉市",
+                        "text": "武汉市"
+                    },
+                    {
+                        "value": "荆州市",
+                        "text": "荆州市"
+                    },
+                    {
+                        "value": "天门市",
+                        "text": "天门市"
+                    }
+                ]
+            },
+            {
+                "value": "四川省",
+                "text": "四川省",
+                "children": [
+                    {
+                        "value": "成都市",
+                        "text": "成都市"
+                    },
+                    {
+                        "value": "绵阳市",
+                        "text": "绵阳市"
+                    },
+                    {
+                        "value": "巴中市",
+                        "text": "巴中市"
+                    }
+                ]
+            }
+        ],
+    };
+  },
+  methods: {
+    delImg(index) {
+      this.uploadImg.splice(index, 1);
     },
-    methods:{
-        delImg(index){
-            this.uploadImg.splice(index, 1) 
-        },
-        test(){
-            console.log(1111111111);
-        }
+    test() {
+      console.log(1111111111);
     }
+  }
 };
 </script>
 
 <style lang="less" scoped>
-
-.bgf{
-    background: #fff;
+.bgf {
+  background: #fff;
 }
 .signup {
-    // padding-bottom:50px;
+  // padding-bottom:50px;
   .banner {
     height: 125px;
     width: 100%;
@@ -89,33 +155,32 @@ export default {
       align-items: center;
       justify-content: space-between;
       height: 88px;
-       .delImg{
-          text-align:center;
-          right:0;
-          top:0;
-          background: #f05b29;
-          color:#fff;
-          width:15px;
-          height: 15px;
-          border-bottom-left-radius: 14px;
-          z-index:1;
-          
+      .delImg {
+        text-align: center;
+        right: 0;
+        top: 0;
+        background: #f05b29;
+        color: #fff;
+        width: 15px;
+        height: 15px;
+        border-bottom-left-radius: 14px;
+        z-index: 1;
       }
-      .hidden{
-          width:30px;
-          height:30px;
-          right:0;
-          top:0;
-          background: transparent;
-          z-index:2
+      .hidden {
+        width: 30px;
+        height: 30px;
+        right: 0;
+        top: 0;
+        background: transparent;
+        z-index: 2;
       }
-      .upload_img{
-          width:60px;
-          height:60px;
+      .upload_img {
+        width: 60px;
+        height: 60px;
       }
       .photoLogo {
         background: #f5f5f5;
-        border: 1px dashed  rgba(200, 200, 200, 0.5);
+        border: 1px dashed rgba(200, 200, 200, 0.5);
         width: 60px;
         height: 60px;
         justify-content: center;
@@ -134,7 +199,7 @@ export default {
       height: 100%;
       border: none;
       outline: none;
-      padding-right:26px;
+      padding-right: 26px;
       text-align: right;
     }
     input::-ms-input-placeholder {
@@ -167,34 +232,34 @@ export default {
     }
     textarea {
       width: 100%;
-      height:88px;
+      height: 88px;
       border: none;
-      font-size:12px;
-      color:#999999;
-      padding-top:10px;
+      font-size: 12px;
+      color: #999999;
+      padding-top: 10px;
       line-height: 18px;
       letter-spacing: 1px;
     }
-    .sign_btn{
-        background:#ffffff;
-        height:50px;
-        bottom:0;
-        width:100%;
-        max-width: 600px;
-        left:50%;
-        transform: translateX(-50%);
-        padding:7px 14px;
-        z-index:1000;
-        button{
-            border:none;
-            width:100%;
-            background:#f05b29;
-            color:#fff;
-            border-radius:2px;
-            line-height: 35px;
-            height:35px;
-            font-size:14px;
-        }
+    .sign_btn {
+      background: #ffffff;
+      height: 50px;
+      bottom: 0;
+      width: 100%;
+      max-width: 600px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 7px 14px;
+      z-index: 10;
+      button {
+        border: none;
+        width: 100%;
+        background: #f05b29;
+        color: #fff;
+        border-radius: 2px;
+        line-height: 35px;
+        height: 35px;
+        font-size: 14px;
+      }
     }
   }
 }

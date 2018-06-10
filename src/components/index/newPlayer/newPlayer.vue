@@ -1,18 +1,18 @@
 <template>
     <div>
         <div class="playBox clearfix">
-                <div class="fr item pr" v-for="(items,key) in [1,2,3,4,5,6,7,8,9,10]" :key="key">
+                <div class="fl item pr" v-for="(item,key) in playerlist" :key="key">
                       <div>
-                        <router-link :to="{path:'playDetail',query:{id:playerId}}">                                         
-                            <div class="pa playerNum">0014</div>
-                            <img src="//img1.shikee.com/try/2016/06/23/15395220917905380014.jpg" alt="">
+                        <router-link :to="{path:'playDetail',query:{id:item.id}}">                                         
+                            <div class="pa playerNum">{{item.number}}</div>
+                            <img :src="item.head_image" alt="">
                         </router-link>
                         <div class="play_info pr">
                             <div class="frc info_top">
-                                <div class="name">张天帅</div>
-                                <div class="piaoshu">1102票</div>
+                                <div class="name">{{item.name}}</div>
+                                <div class="piaoshu">{{item.votes}}票</div>
                             </div>
-                            <div class="info_place">湖北·天门</div>
+                            <div class="info_place">湖北·{{item.city}}</div>
                             <yd-button v-if="beging" size="large" @click.native="openConfrim"  bgcolor='#f05b29' @click="toupiao">投TA一票</yd-button>
                             <yd-button v-else size="large" @click.native="openConfrim"  bgcolor='#f3a88f'>已投</yd-button>
                         </div>
@@ -28,7 +28,8 @@ export default {
     return {
       beging: true,
       playerId: 1000,
-      ending: true
+      ending: true,
+      playerlist:""
       // isTouPiao:false,
     };
   },
@@ -36,18 +37,49 @@ export default {
     toupiao(index) {
       console.log(index);
     },
+    
     openConfrim() {
       this.$dialog.confirm({
         title:
-          "<p style='text-align:center;font-size:18px;color:#000'>感谢您为其投出的第<span style='color:#f05f2e'>160</span>票<p>",
+          "<p style='text-align:center;font-size:18px;color:#000'>感谢您为其投出的第<span style='color:#f05f2e'>{160}</span>票<p>",
         mes: `<img src="//img1.shikee.com/try/2016/06/23/15395220917905380014.jpg" style="width:100%;height:187px;"> 
-              <p style='text-align:center;font-size:16px;color:#ccc;height:40px;line-height:40px;border-bottom:1px solid #ccc'>找挖机配件.上掌窝APP<p>`,
-        opts: () => {
-          this.$dialog.toast({ mes: "你点了确定", timeout: 1000 });
-          this.beging = false;
-        }
+              <p style='text-align:center;font-size:16px;color:#ccc;padding-top:20px'>找挖机配件.上掌窝APP<p>`,
+        opts:[{
+            txt: "取消", //按钮文字
+            color: "#000", //按钮颜色            
+            // stay: Boolean, //是否保留提示框
+            callback: function(){
+              console.log( "取消" );
+            } //按钮回调函数
+          },
+          {
+            txt: "立即下载", //按钮文字
+            color: "#f05b29", //按钮颜色
+            // stay: Boolean, //是否保留提示框
+            callback: function(){
+              console.log( "确定" );
+              location.href = "http://www.baidu.com"
+            } //按钮回调函数
+          },
+          
+          
+          
+          ] 
       });
+    },
+     // 选手列表
+    getPlayerlist(){
+      this.$http.post(this.$api.playerlist, this.$qs.stringify({ zone_id: 7,page:1 })).then((res)=>{
+           if(res.data.status==1){
+             this.playerlist = res.data.data.playerlist;           
+            // console.log(res)
+           }
+            console.log(this.playerlist);
+        });
     }
+  },
+  created(){
+    this.getPlayerlist();
   }
 };
 </script>

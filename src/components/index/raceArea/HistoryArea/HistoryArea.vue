@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="loading">
         <yd-slider autoplay="3000">
               <yd-slider-item v-for="(imgItem,key) in imgs" :key="key">
                       <img :src="imgItem">
@@ -23,61 +23,28 @@
               <!-- 数据展示 -->
               <div class="frc box">
                 <div class="fcc">
-                  <div class="num ">2115</div>
+                  <div class="num ">{{HistoryAreaData.matchData.player_count|formatNum}}</div>
                   <div class="drc">参赛选手</div>
                 </div>
                 <div class="fcc">
-                    <div class="num">16.3 <span>万</span> </div>
+                    <div class="num">{{HistoryAreaData.matchData.vote_count|formatNum}}</div>
                     <div class="drc">累计投票</div>
                 </div>
                 <div class="fcc">
-                    <div class="num">89.6 <span>万</span> </div>
+                    <div class="num">{{HistoryAreaData.matchData.visitor_count|formatNum}}</div>
                     <div class="drc">访问量</div>
                 </div>
               </div>
             </div>   
         </div>
         <!-- 历史记录列表 -->
-        <div class="mb10" @click="goHistoryHome">
-          <img src="../../../../assets/index/history/one.png" alt="" class="historyImg mb14">
+        <div class="mb10" @click="goHistoryHome" v-for="(item,key) in HistoryAreaData.list" :key="key">
+          <img :src="item.head" alt="" class="historyImg mb14">
          <div class="pr">
             <div class="frc pl10 pr10">
               <img src="../../../../assets/index/history/location.png" alt="" class="locationImg ">
-              <div class="fontColor pr5 area pl8">广东站</div>
+              <div class="fontColor pr5 area pl8">{{item.name}}</div>
               <div class="pl6"><span class="fontColor">161</span>名参赛选手，累计投票<span class="fontColor">8239</span>票，共<span class="fontColor">33226</span>次访问量</div>
-            </div>
-            <div class="line pa"></div>
-         </div>
-        </div>
-        <div class="mb10">
-          <img src="../../../../assets/index/history/one.png" alt="" class="historyImg mb14">
-         <div class="pr">
-            <div class="frc pl10 pr10">
-              <img src="../../../../assets/index/history/location.png" alt="" class="locationImg ">
-              <div class="fontColor pr5 area pl8">广东站</div>
-              <div class="pl6"><span class="fontColor">161</span>名参赛选手，累计投票<span class="fontColor">8239</span>票，共<span class="fontColor">33226</span>次访问量</div>
-            </div>
-            <div class="line pa"></div>
-         </div>
-        </div>
-         <div class="mb10">
-          <img src="../../../../assets/index/history/one.png" alt="" class="historyImg mb14">
-          <div class="pr">
-              <div class="frc pl10 pr10">
-                <img src="../../../../assets/index/history/location.png" alt="" class="locationImg ">
-                <div class="fontColor pr5 area pl8">广西站</div>
-                <div class="pl6"><span class="fontColor">161</span>名参赛选手，累计投票<span class="fontColor">8239</span>票，共<span class="fontColor">33226</span>次访问量</div>
-              </div>
-              <div class="line pa"></div>
-          </div>
-        </div> 
-        <div class="mb10">
-          <img src="../../../../assets/index/history/one.png" alt="" class="historyImg mb14">
-         <div class="pr">
-            <div class="frc pl10 pr10">
-              <img src="../../../../assets/index/history/location.png" alt="" class="locationImg ">
-              <div class="fontColor pr5 area pl8">湖北站</div>
-              <div class="pl10"><span class="fontColor">160123101</span>名参赛选手，累计投票<span class="fontColor">8231231239</span>票，共<span class="fontColor">331231323226</span>次访问量</div>
             </div>
             <div class="line pa"></div>
          </div>
@@ -93,7 +60,9 @@ export default {
         "http://static.ydcss.com/uploads/ydui/1.jpg",
         "http://static.ydcss.com/uploads/ydui/2.jpg",
         "http://static.ydcss.com/uploads/ydui/3.jpg"
-      ]
+      ],
+      HistoryAreaData:[],
+      loading:false,
     };
   },
   methods:{
@@ -101,6 +70,31 @@ export default {
       this.$router.push({ name: 'HistoryHome'})
       // console.log(this.$router);
     },
+    getHistoryArea() {
+       this.$http.post(this.$api.historyZone).then((res)=>{
+           if(res.data.status==1){
+             this.HistoryAreaData = res.data.data;    
+             this.loading = true,
+             this.$vux.loading.hide()    
+           }
+        });
+    },
+  },
+  filters: {
+      // 格式化单位
+      formatNum(num) {
+          if(num<10000){
+            return num
+          }else{
+            return  Math.round((num /10000) * 10) / 10 + "万";
+          }
+      }
+    },
+  created(){
+    this.$vux.loading.show({
+    text: 'Loading'
+    })
+    this.getHistoryArea();
   }
 };
 </script>

@@ -11,8 +11,9 @@ import playDetail from '@/components/index/newPlayer/playDetail/playDetail' //�
 import Voting from '@/components/index/raceArea/Voting'//投票中
 import HistoryArea from '@/components/index/raceArea/HistoryArea/HistoryArea'//历史赛区
 import HistoryHome from '@/components/index/raceArea/HistoryArea/Home/Home'//历史赛区home
-import Enrolment from '@/components/index/raceArea/Enrolment'//报名中
-import newPlayer from '@/components/index/newPlayer/newPlayer'//报名中
+import Enrolment from '@/components/index/raceArea/Enrolment'
+import newPlayer from '@/components/index/newPlayer/newPlayer'
+// import searchList from '@/components/searchList/searchList'
 
 // index的子组件
 var subpages = [
@@ -43,7 +44,11 @@ Vue.use(Router)
 export default new Router({
   // 注册子路由
 
-  routes: [{
+  routes: [
+    {
+      path: '/',
+      redirect: '/index'
+    },{
       path: '/login',
       name: 'login',
       component: Login
@@ -79,11 +84,6 @@ export default new Router({
       name: 'playDetail',
       component: playDetail,
     },
-    // {
-    //   path: '/HistoryHome',
-    //   name: 'HistoryHome',
-    //   component: HistoryHome,
-    // },
     {
       path: '/searchList',
       name: 'searchList',
